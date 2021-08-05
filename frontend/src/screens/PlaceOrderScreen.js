@@ -1,0 +1,145 @@
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import {
+  Button,
+  Row,
+  Col,
+  ListGroup,
+  Image,
+  Card,
+  ListGroupItem,
+} from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import Message from "../components/Message";
+import CheckoutSteps from "./CheckoutSteps";
+
+const PlaceOrderScreen = () => {
+  const cart = useSelector((state) => state.cart);
+
+  //calculate prices
+  cart.itemsPrice = cart.cartItems.reduce(
+    (acc, item) => acc + item.price * item.qty,
+    0
+  );
+
+  cart.shippingPrice = cart.itemsPrice > 100 ? 100 : 0;
+
+  cart.taxPrice = Number((0.15 * cart.itemsPrice).toFixed(2));
+
+  cart.totalPrice = Number(
+    cart.itemsPrice + cart.shippingPrice + cart.taxPrice
+  ).toFixed(2);
+
+  const placeOrderHandler = () => {};
+
+  return (
+    <>
+      <CheckoutSteps step1 step2 step3 step4 />
+      <Row>
+        <Col md={8}>
+          <ListGroup variant="flush">
+            <ListGroupItem>
+              <h2>Shipping</h2>
+              <p>
+                <strong>Address:</strong>
+                {cart.shippingAddress.address},{cart.shippingAddress.city},
+                {cart.shippingAddress.postalCode},{cart.shippingAddress.country}
+              </p>
+            </ListGroupItem>
+
+            <ListGroupItem>
+              <h2>Payment Method</h2>
+              <strong>Method: </strong>
+              {cart.paymentMethod}
+            </ListGroupItem>
+
+            <ListGroupItem>
+              <h2>Order Items:</h2>
+              {cart.cartItems.length === 0 ? (
+                <Message>The cart is empty</Message>
+              ) : (
+                <ListGroupItem variant="flush">
+                  {cart.cartItems.map((item, index) => (
+                    <ListGroupItem key={index}>
+                      <Row>
+                        <Col md={1}>
+                          <Image
+                            src={item.image}
+                            alt={item.name}
+                            fluid
+                            rounded
+                          />
+                        </Col>
+
+                        <Col>
+                          <Link to={`/product/${item.product}`}>
+                            {item.name}
+                          </Link>
+                        </Col>
+
+                        <Col md={4}>
+                          {item.qty} x Rs{item.price}=Rs{item.qty * item.price}
+                        </Col>
+                      </Row>
+                    </ListGroupItem>
+                  ))}
+                </ListGroupItem>
+              )}
+            </ListGroupItem>
+          </ListGroup>
+        </Col>
+
+        <Col md={4}>
+          <Card>
+            <ListGroup variant="flush">
+              <ListGroupItem>
+                <h2>Order Summary</h2>
+              </ListGroupItem>
+
+              <ListGroupItem>
+                <Row>
+                  <Col>Items</Col>
+                  <Col>Rs {cart.itemsPrice}</Col>
+                </Row>
+              </ListGroupItem>
+
+              <ListGroupItem>
+                <Row>
+                  <Col>Shipping</Col>
+                  <Col>Rs {cart.shippingPrice}</Col>
+                </Row>
+              </ListGroupItem>
+
+              <ListGroupItem>
+                <Row>
+                  <Col>Tax</Col>
+                  <Col>Rs {cart.taxPrice}</Col>
+                </Row>
+              </ListGroupItem>
+
+              <ListGroupItem>
+                <Row>
+                  <Col>Total</Col>
+                  <Col>Rs {cart.totalPrice}</Col>
+                </Row>
+              </ListGroupItem>
+
+              <ListGroupItem>
+                <Button
+                  type="button"
+                  className="btn-block"
+                  disabled={cart.cartItems === 0}
+                  onClick={placeOrderHandler}
+                >
+                  Place Order
+                </Button>
+              </ListGroupItem>
+            </ListGroup>
+          </Card>
+        </Col>
+      </Row>
+    </>
+  );
+};
+
+export default PlaceOrderScreen;
