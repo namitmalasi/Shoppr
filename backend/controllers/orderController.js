@@ -3,7 +3,7 @@ import Order from "../models/orderModel.js";
 
 //@desc     Create new order
 //@route    POST /api/orders
-//@acces    Private
+//@access    Private
 const addOrderItems = asyncHandler(async (req, res) => {
   const {
     orderItems,
@@ -38,7 +38,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
 
 //@desc    Get order by ID
 //@route    GET /api/orders/:id
-//@acces    Private
+//@access    Private
 const getOrderById = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id).populate(
     "user",
@@ -55,14 +55,14 @@ const getOrderById = asyncHandler(async (req, res) => {
 
 //@desc    Update order to Paid
 //@route    GET /api/orders/:id/pay
-//@acces    Private
+//@access    Private
 const updateOrderToPaid = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id);
 
   if (order) {
     order.isPaid = true;
     order.paidAt = Date.now();
-    orer.paymentResult = {
+    order.paymentResult = {
       id: req.body.id,
       status: req.body.status,
       update_time: req.body.update_time,
@@ -76,4 +76,12 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
     throw new Error("Order not found");
   }
 });
-export { addOrderItems, getOrderById, updateOrderToPaid };
+
+//@desc     Get logged in user orders
+//@route    GET /api/orders/myorders
+//@access    Private
+const getMyOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find({ user: req.user._id });
+  res.json(orders);
+});
+export { addOrderItems, getOrderById, updateOrderToPaid, getMyOrders };

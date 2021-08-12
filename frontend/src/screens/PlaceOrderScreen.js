@@ -102,7 +102,7 @@ const PlaceOrderScreen = ({ history }) => {
                         </Col>
 
                         <Col md={4}>
-                          {item.qty} x Rs{item.price}=Rs{item.qty * item.price}
+                          {item.qty} x ${item.price}=${item.qty * item.price}
                         </Col>
                       </Row>
                     </ListGroupItem>
@@ -123,28 +123,28 @@ const PlaceOrderScreen = ({ history }) => {
               <ListGroupItem>
                 <Row>
                   <Col>Items</Col>
-                  <Col>Rs {cart.itemsPrice}</Col>
+                  <Col>${cart.itemsPrice}</Col>
                 </Row>
               </ListGroupItem>
 
               <ListGroupItem>
                 <Row>
                   <Col>Shipping</Col>
-                  <Col>Rs {cart.shippingPrice}</Col>
+                  <Col>${cart.shippingPrice}</Col>
                 </Row>
               </ListGroupItem>
 
               <ListGroupItem>
                 <Row>
                   <Col>Tax</Col>
-                  <Col>Rs {cart.taxPrice}</Col>
+                  <Col>${cart.taxPrice}</Col>
                 </Row>
               </ListGroupItem>
 
               <ListGroupItem>
                 <Row>
                   <Col>Total</Col>
-                  <Col>Rs {cart.totalPrice}</Col>
+                  <Col>${cart.totalPrice}</Col>
                 </Row>
               </ListGroupItem>
               <ListGroupItem>
