@@ -1,5 +1,6 @@
 import express from "express";
 import path from "path";
+import morgan from "morgan";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import productRoutes from "./routes/productRoutes.js";
@@ -15,6 +16,9 @@ dotenv.config();
 
 connectDB();
 
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
